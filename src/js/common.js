@@ -145,3 +145,118 @@ com.loadImages = function(style) {
 
 	document.getElementsByTagName("body")[0].style.background = "url(src/img/" + style + "/bg.jpg)";
 }
+
+// 显示列表
+com.show = function() {
+	com.ct.clearRect(0, 0, com.width, com.height);
+	for (var i = 0; i < com.childList.length; i++) {
+		com.childList[i].show();
+	}
+}
+
+// 显示移动的棋子外框
+com.showPane = function(x, y, newX, newY) {
+	com.pane.isShow = true;
+	com.pane.x = x;
+	com.pane.y = y;
+	com.pane.newX = newX;
+	com.pane.newY = newY;
+}
+
+// 生成map里面有的棋子
+com.createMans = function(map) {
+	for (var i = 0; i < map.length; i++) {
+		for (var n = 0; n < map[i].length; n++) {
+			var key = map[i][n];
+			if (key) {
+				com.mans[key] = new com.class.Man(key);
+				com.mans[key].x = n;
+				com.mans[key].y = i;
+				com.childList.push(com.mans[key]);
+			}
+		}
+	}
+}
+
+// 调试输出
+com.alert = function(obj, f, n) {
+	if (typeof obj != "object") {
+		try {
+			console.log(obj);
+		} catch(e) {
+			alert(e);
+		}
+	}
+	var arr = [];
+	for (var i in obj)
+		arr.push(i + "=" + obj[i]);
+	try {
+		console.log(arr.join(n || "\n"))
+	} catch(e) {
+		alert(e);
+	}
+}
+
+// 这是com.alert的简写，考虑z变量名最不常用
+var z = com.alert;
+
+// 获取元素距离页面左侧的距离
+com.getDomXY = function(dom) {
+	var left = dom.offsetLeft;
+	var top = dom.offsetTop;
+	var current = dom.offsetParent;
+	while (current != null) {
+		left += current.offsetLeft;
+		top += current.offsetTop;
+		current = current.offsetParent;
+	}
+	return {
+		x: left,
+		y: top
+	};
+}
+
+// 获取cookie
+com.getCookie = function(name) {
+	if (document.cookie.length > 0) {
+		start = document.cookie.indexOf(name + "=");
+		if (start != -1) {
+			start = start + name.length + 1;
+			end = document.cookie.indexOf(";", start);
+			if (end == -1) {
+				end = document.cookie.length;
+			}
+			return unescape(document.cookie.substring(start, end));
+		}
+	}
+	return false;
+}
+
+// 二维数组克隆
+com.arr2Clone = function(arr) {
+	var newArr = [];
+	for (var i = 0; i < arr.length; i++) {
+		newArr[i] = arr[i].slice();
+	}
+	return newArr;
+}
+
+// ajax载入数据
+com.getData = function(url, fun) {
+	var XMLHttpRequestObject = false;
+	if (window.XMLHttpRequest) {
+		XMLHttpRequestObject = new XMLHttpRequest();
+	} else if (window.ActiveXObject) {
+		XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	if (XMLHttpRequestObject) {
+		XMLHttpRequestObject.open("GET", url);
+		XMLHttpRequestObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		XMLHttpRequestObject.onreadystatechange = function() {
+			if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200) {
+				fun(XMLHttpRequestObject.responseText);
+			}
+		}
+		XMLHttpRequestObject.send(null);
+	}
+}
