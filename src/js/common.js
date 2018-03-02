@@ -352,6 +352,7 @@ com.bylaw = {};
 // 车
 com.bylaw.c = function(x, y, map, my) {
 	var d = [];
+
 	// 左侧检索
 	for (var i = x-1; i >= 0; i--) {
 		if (map[y][i]) {
@@ -391,6 +392,108 @@ com.bylaw.c = function(x, y, map, my) {
 		} else {
 			d.push([x, i]);
 		}
+	}
+
+	return d;
+}
+
+// 马
+com.bylaw.m = function(x, y, map, my) {
+	var d = [];
+
+	// 1点方向
+	if (y-2 >= 0 && x+1 <= 8 && !play.map[y-1][x] && (!com.mans[map[y-2][x+1]] || com.mans[map[y-2][x+1]].my != my))
+		d.push([x+1, y-2]);
+	// 2点方向
+	if (y-1 >= 0 && x+2 <= 8 && !play.map[y][x+1] && (!com.mans[map[y-1][x+2]] || com.mans[map[y-1][x+2]].my != my))
+		d.push([x+2, y-1]);
+	// 4点方向
+	if (y+1 <= 9 && x+2 <= 8 && !play.map[y][x+1] && (!com.mans[map[y+1][x+2]] || com.mans[map[y+1][x+2]].my != my))
+		d.push([x+2, y+1]);
+	// 5点方向
+	if (y+2 <= 9 && x+1 <= 8 && !play.map[y+1][x] && (!com.mans[map[y+2][x+1]] || com.mans[map[y+2][x+1]].my != my))
+		d.push([x+1, y+2]);
+	// 7点方向
+	if (y+2 <= 9 && x-1 >= 0 && !play.map[y+1][x] && (!com.mans[map[y+2][x-1]] || com.mans[map[y+2][x-1]].my != my))
+		d.push([x-1, y+2]);
+	// 8点方向
+	if (y+1 <= 9 && x-2 >= 0 && !play.map[y][x-1] && (!com.mans[map[y+1][x-2]] || com.mans[map[y+1][x-2]].my != my))
+		d.push([x-2, y+1]);
+	// 10点方向
+	if (y-1 >= 0 && x-2 >= 0 && !play.map[y][x-1] && (!com.mans[map[y-1][x-2]] || com.mans[map[y-1][x-2]].my != my))
+		d.push([x-2, y-1]);
+	// 11点方向
+	if (y-2 >= 0 && x-1 >= 0 && !play.map[y-1][x] && (!com.mans[map[y-2][x-1]] || com.mans[map[y-2][x-1]].my != my))
+		d.push([x-1, y-2]);
+
+	return d;
+}
+
+// 相
+com.bylaw.x = function(x, y, map, my) {
+	var d = [];
+
+	if (my === 1) { // 红方
+		// 4点半方向
+		if (y+2 <= 9 && x+2 <= 8 && !play.map[y+1][x+1] && (!com.mans[map[y+2][x+2]] || com.mans[map[y+2][x+2]].my != my))
+			d.push([x+2, y+2]);
+		// 7点半方向
+		if (y+2 <= 9 && x-2 >= 0 && !play.map[y+1][x-1] && (!com.mans[map[y+2][x-2]] || com.mans[map[y+2][x-2]].my != my))
+			d.push([x-2, y+2]);
+		// 1点半方向
+		if (y-2 >= 5 && x+2 <= 8 && !play.map[y-1][x+1] && (!com.mans[map[y-2][x+2]] || com.mans[map[y-2][x+2]].my != my))
+			d.push([x+2, y-2]);
+		// 10点半方向
+		if (y-2 >= 5 && x-2 >= 0 && !play.map[y-1][x-1] && (!com.mans[map[y-2][x-2]] || com.mans[map[y-2][x-2]].my != my))
+			d.push([x-2, y-2]);
+	} else {
+		// 4点半方向
+		if (y+2 <= 4 && x+2 <= 8 && !play.map[y+1][x+1] && (!com.mans[map[y+2][x+2]] || com.mans[map[y+2][x+2]].my != my))
+			d.push([x+2, y+2]);
+		// 7点半方向
+		if (y+2 <= 4 && x-2 >= 0 && !play.map[y+1][x-1] && (!com.mans[map[y+2][x-2]] || com.mans[map[y+2][x-2]].my != my))
+			d.push([x-2, y+2]);
+		// 1点半方向
+		if (y-2 >= 0 && x+2 <= 8 && !play.map[y-1][x+1] && (!com.mans[map[y-2][x+2]] || com.mans[map[y-2][x+2]].my != my))
+			d.push([x+2, y-2]);
+		// 10点半方向
+		if (y-2 >= 0 && x-2 >= 0 && !play.map[y-1][x-1] && (!com.mans[map[y-2][x-2]] || com.mans[map[y-2][x-2]].my != my))
+			d.push([x-2, y-2]);
+	}
+
+	return d;
+}
+
+// 士
+com.bylaw.s = function(x, y, map, my) {
+	var d = [];
+
+	if (my === 1) { // 红方
+		// 4点半方向
+		if (y+1 <= 9 && x+1 <= 5 && (!com.mans[map[y+1][x+1]] || com.mans[map[y+1][x+1]].my != my))
+			d.push([x+1, y+1]);
+		// 7点半方向
+		if (y+1 <= 9 && x-1 >= 3 && (!com.mans[map[y+1][x-1]] || com.mans[map[y+1][x-1]].my != my))
+			d.push([x-1, y+1]);
+		// 1点半方向
+		if (y-1 >= 7 && x+1 <= 5 && (!com.mans[map[y-1][x+1]] || com.mans[map[y-1][x+1]].my != my))
+			d.push([x+1, y-1]);
+		// 10点半方向
+		if (y-1 >= 7 && x-1 >= 3 && (!com.mans[map[y-1][x-1]] || com.mans[map[y-1][x-1]].my != my))
+			d.push([x-1, y-1]);
+	} else {
+		// 4点半方向
+		if (y+1 <= 2 && x+1 <= 5 && (!com.mans[map[y+1][x+1]] || com.mans[map[y+1][x+1]].my != my))
+			d.push([x+1, y+1]);
+		// 7点半方向
+		if (y+1 <= 2 && x-1 >= 3 && (!com.mans[map[y+1][x-1]] || com.mans[map[y+1][x-1]].my != my))
+			d.push([x-1, y+1]);
+		// 1点半方向
+		if (y-1 >= 0 && x+1 <= 5 && (!com.mans[map[y-1][x+1]] || com.mans[map[y-1][x+1]].my != my))
+			d.push([x+1, y-1]);
+		// 10点半方向
+		if (y-1 >= 0 && x-1 >= 3 && (!com.mans[map[y-1][x-1]] || com.mans[map[y-1][x-1]].my != my))
+			d.push([x-1, y-1]);
 	}
 	return d;
 }
