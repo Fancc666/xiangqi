@@ -260,3 +260,137 @@ com.getData = function(url, fun) {
 		XMLHttpRequestObject.send(null);
 	}
 }
+
+// 把坐标生成着法
+com.createMove = function(map, x, y, newX, newY) {
+	var h = "";
+	var man = com.mans[map[y][x]];
+	h += man.text;
+	map[newY][newX] = map[y][x];
+	delete map[y][x];
+	if (man.my == 1) {
+		var mumTo = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+		newX = 8-newX;
+		h += mumTo[8-x];
+		if (newY > y) {
+			h += "退";
+			if (man.pater == "m" || man.pater == "s" || man.pater == "x") {
+				h += mumTo[newX];
+			} else {
+				h += mumTo[newY - y - 1];
+			}
+		} else if (newY < y) {
+			h += "进";
+			if (man.pater == "m" || man.pater == "s" || man.pater == "x") {
+				h += mumTo[newX];
+			} else {
+				h += mumTo[y - newY - 1];
+			}
+		} else {
+			h += "平";
+			h += mumTo[newX];
+		}
+	} else {
+		var mumTo = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+		h += mumTo[x];
+		if (newY > y) {
+			h += "进";
+			if (man.pater == "M" || man.pater == "S" || man.pater == "X") {
+				h += mumTo[newX];
+			} else {
+				h += mumTo[newY - y - 1];
+			}
+		} else if (newY < y) {
+			h += "退";
+			if (man.pater == "M" || man.pater == "S" || man.pater == "X") {
+				h += mumTo[newX];
+			} else {
+				h += mumTo[y - newY - 1];
+			}
+		} else {
+			h += "平";
+			h += mumTo[newX];
+		}
+	}
+	return h;
+}
+
+com.initMap = [
+	['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    , 'P0',     ,     ,     ,     ,     , 'P1',     ],
+	['Z0',     , 'Z1',     , 'Z2',     , 'Z3',     , 'Z4'],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	['z0',     , 'z1',     , 'z2',     , 'z3',     , 'z4'],
+	[    , 'p0',     ,     ,     ,     ,     , 'p1',     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
+];
+
+com.keys = {
+	"c0": "c", "c1": "c",
+	"m0": "m", "m1": "m",
+	"x0": "x", "x1": "x",
+	"s0": "s", "s1": "s",
+	"j0": "j",
+	"p0": "p", "p1": "p",
+	"z0": "z", "z1": "z", "z2": "z", "z3": "z", "z4": "z", "z5": "z",
+
+	"C0": "C", "C1": "C",
+	"M0": "M", "M1": "M",
+	"X0": "X", "X1": "X",
+	"S0": "S", "S1": "S",
+	"J0": "J",
+	"P0": "P", "P1": "P",
+	"Z0": "Z", "Z1": "Z", "Z2": "Z", "Z3": "Z", "Z4": "Z", "Z5": "Z",
+}
+
+// 棋子能走的着点
+com.bylaw = {};
+
+// 车
+com.bylaw.c = function(x, y, map, my) {
+	var d = [];
+	// 左侧检索
+	for (var i = x-1; i >= 0; i--) {
+		if (map[y][i]) {
+			if (com.mans[map[y][i]].my != my)
+				d.push([i, y]);
+			break;
+		} else {
+			d.push([i, y]);
+		}
+	}
+	// 右侧检索
+	for (var i = x+1; i <= 8; i++) {
+		if (map[y][i]) {
+			if (com.mans[map[y][i]].my != my)
+				d.push([i, y]);
+			break;
+		} else {
+			d.push([i, y]);
+		}
+	}
+	// 上方检索
+	for (var i = y-1; i >= 0; i--) {
+		if (map[i][x]) {
+			if (com.mans[map[i][x]].my != my)
+				d.push([x, i]);
+			break;
+		} else {
+			d.push([x, i]);
+		}
+	}
+	// 下方检索
+	for (var i = y+1; i <= 9; i++) {
+		if (map[i][x]) {
+			if (com.mans[map[i][x]].my != my)
+				d.push([x, i]);
+			break;
+		} else {
+			d.push([x, i]);
+		}
+	}
+	return d;
+}
