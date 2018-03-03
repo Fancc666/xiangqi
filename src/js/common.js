@@ -680,11 +680,11 @@ com.value = {
 
 	// 相的价值
 	x: [
-		[0, 0, 20, 0,  0, 0, 20, 0, 0],
-		[0, 0,  0, 0,  0, 0,  0, 0, 0],
-		[0, 0,  0, 0, 23, 0,  0, 0, 0],
-		[0, 0,  0, 0,  0, 0,  0, 0, 0],
-		[0, 0, 20, 0,  0, 0, 20, 0, 0],
+		[ 0, 0, 20, 0,  0, 0, 20, 0,  0],
+		[ 0, 0,  0, 0,  0, 0,  0, 0,  0],
+		[18, 0,  0, 0, 23, 0,  0, 0, 18],
+		[ 0, 0,  0, 0,  0, 0,  0, 0,  0],
+		[ 0, 0, 20, 0,  0, 0, 20, 0,  0],
 
 		[ 0, 0, 20, 0,  0, 0, 20, 0,  0],
 		[ 0, 0,  0, 0,  0, 0,  0, 0,  0],
@@ -752,4 +752,106 @@ com.value = {
 		[0, 0,  0, 0,  0, 0,  0, 0, 0],
 		[0, 0,  0, 0,  0, 0,  0, 0, 0]
 	]
+};
+
+// 黑子价值为红子价值的倒置
+com.value.C = com.arr2Clone(com.value.c).reverse();
+com.value.M = com.arr2Clone(com.value.m).reverse();
+com.value.X = com.value.x;
+com.value.S = com.value.s;
+com.value.J = com.value.j;
+com.value.P = com.arr2Clone(com.value.p).reverse();
+com.value.Z = com.arr2Clone(com.value.z).reverse();
+
+// 棋子
+com.args = {
+	// 红子 中文，图片路径，阵营，权重
+	'c': {text: "车", img: 'r_c', my: 1, bl: "c", value: com.value.c},
+	'm': {text: "马", img: 'r_m', my: 1, bl: "m", value: com.value.m},
+	'x': {text: "相", img: 'r_x', my: 1, bl: "x", value: com.value.x},
+	's': {text: "仕", img: 'r_s', my: 1, bl: "s", value: com.value.s},
+	'j': {text: "将", img: 'r_j', my: 1, bl: "j", value: com.value.j},
+	'p': {text: "炮", img: 'r_p', my: 1, bl: "p", value: com.value.p},
+	'z': {text: "兵", img: 'r_z', my: 1, bl: "z", value: com.value.z},
+
+	// 黑子
+	'C': {text: "車", img: 'b_c', my: -1, bl: "c", value: com.value.C},
+	'M': {text: "馬", img: 'b_m', my: -1, bl: "m", value: com.value.M},
+	'X': {text: "象", img: 'b_x', my: -1, bl: "x", value: com.value.X},
+	'S': {text: "士", img: 'b_s', my: -1, bl: "s", value: com.value.S},
+	'J': {text: "帅", img: 'b_j', my: -1, bl: "j", value: com.value.J},
+	'P': {text: "炮", img: 'b_p', my: -1, bl: "p", value: com.value.P},
+	'Z': {text: "卒", img: 'b_z', my: -1, bl: "z", value: com.value.Z}
+};
+
+com.class = com.class || {}; // 类
+com.class.Man = function(key, x, y) {
+	this.pater = key.slice(0, 1);
+	var o = com.args[this.pater];
+	this.x = x || 0;
+	this.y = y || 0;
+	this.key = key;
+	this.my = o.my;
+	this.text = o.text;
+	this.value = o.value;
+	this.isShow = true;
+	this.alpha = 1;
+	this.ps = []; // 着点
+
+	this.show = function() {
+		if (this.isShow) {
+			com.ct.save();
+			com.ct.globalAlpha = this.alpha;
+			com.ct.drawImage(com[this.pater].img, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY);
+			com.ct.restore();
+		}
+	}
+
+	this.bl = function(map) {
+		var map = map || play.map;
+		return com.bylaw[o.bl](this.x, this.y, map, this.my);
+	}
 }
+
+com.class.Bg = function(img, x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+	this.isShow = true;
+
+	this.show = function() {
+		if (this.isShow)
+			com.ct.drawImage(com.bgImg, com.spaceX * this.x, com.spaceY * this.y);
+	}
+}
+
+com.class.Pane = function(img, x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+	this.newX = x || 0;
+	this.newY = y || 0;
+	this.isShow = true;
+
+	this.show = function() {
+		if (this.isShow) {
+			com.ct.drawImage(com.paneImg, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY);
+			com.ct.drawImage(com.paneImg, com.spaceX * this.newX + com.pointStartX, com.spaceY * this.newY + com.pointStartY);
+		}
+	}
+}
+
+com.class.Dot = function(img, x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+	this.isShow = true;
+	this.dots = [];
+
+	this.show = function() {
+		for (var i = 0; i < this.dots.length; i++) {
+			if (this.isShow)
+				com.ct.drawImage(com.dotImg, com.spaceX * this.dots[i][0] + 10 + com.pointStartX,
+					com.spaceY * this.dots[i][1] + 10 + com.pointStartY);
+		}
+	}
+}
+
+com.init();
