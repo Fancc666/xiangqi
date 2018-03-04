@@ -83,7 +83,7 @@ window.onload = function() {
 
 	// 增加监听器，监听各个切换难度按钮的点击事件
 	com.get("superPlay").addEventListener("click", function(e) {
-		if (confirm("确认开始高手级对弈？")) {
+		if (confirm("确认开始大师级对弈？")) {
 			play.isPlay = true;
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").style.display = "block";
