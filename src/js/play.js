@@ -85,3 +85,105 @@ play.regret = function() {
 	play.isPlay = true;
 	com.show();
 }
+
+// 点击棋盘事件
+play.clickCanvas = function(e) {
+	if (!play.isPlay)
+		return false;
+	var key = play.getClickMan(e);
+	var point = play.getClickPoint(e);
+
+	var x = point.x;
+	var y = point.y;
+
+	if (key) {
+		play.clickMan(key, x, y);
+	} else {
+		play.clickPoint(x, y);
+	}
+	play.isFoul = play.checkFoul(); // 检测是不是长将
+}
+
+// 点击棋子，两种情况：选中或者吃子
+play.clickMan = function(key, x, y) {
+	var man = com.mans[key];
+	// 吃子
+	if (play.nowManKey && play.nowManKey != key && man.my != com.mans[play.nowManKey].my) {
+		// man为被吃掉的棋子
+		if (play.indexOfPs(com.mans[play.nowManKey].ps, [x, y])) {
+			man.isShow = false;
+			var pace = com.mans[play.nowManKey].x + "" + com.mans[play.nowManKey].y;
+			delete play.map[com.mans[play.nowManKey].y][com.mans[play.nowManKey].x];
+			play.map[y][x] = play.nowManKey;
+			com.showPane(com.mans[play.nowManKey].x, com.mans[play.nowManKey].y, x, y);
+			com.mans[play.nowManKey].x = x;
+			com.mans[play.nowManKey].y = y;
+			com.mans[play.nowManKey].alpha = 1;
+
+			play.pace.push(pace + x + y);
+			play.nowManKey = false;
+			com.pane.isShow = false;
+			com.dot.dots = [];
+			com.show();
+			setTimeout("play.AIPlay()", 500);
+			if (key == "j0")
+				play.showWin(-1);
+			else if (key == "J0")
+				play.showWin(1);
+		}
+	// 选中棋子
+	} else {
+		if (man.my === 1) {
+			if (com.mans[play.nowManKey])
+				com.mans[play.nowManKey].alpha = 1;
+			man.alpha = 0.6;
+			com.pane.isShow = false;
+			play.nowManKey = key;
+			com.mans[key].ps = com.mans[key].bl(); // 获得所有能着点
+			com.dot.dots = com.mans[key].ps;
+			com.show();
+		}
+	}
+}
+
+// 点击着点
+play.clickPoint = function(x, y) {
+	var key = play.nowManKey;
+	var man = com.mans[key];
+	if (play.nowManKey) {
+		if (play.indexOfPs(com.mans[key].ps, [x, y])) {
+			var pace = man.x + "" + man.y;
+			delete play.map[man.y][man.x];
+			play.map[y][x] = key;
+			com.showPane(man.x, man.y, x, y);
+			man.x = x;
+			man.y = y;
+			man.alpha = 1;
+			play.pace.push(pace + x + y);
+			play.nowManKey = false;
+			com.dot.dots = [];
+			com.show();
+			setTimeout("play.AIPlay()", 500);
+		}
+	}
+}
+
+// AI自动走棋
+play.AIPlay = function() {
+	play.my = -1;
+	var pace = AI.init(play.pace.join(""));
+	if (!pace) {
+		play.showWin(1);
+		return;
+	}
+	play.pace.push(pace.join(""));
+	var key = play.map[pace[1]][pace[0]];
+	play.nowManKey = key;
+
+	var key = play.map[pace[3]][pace[2]];
+	if (key) {
+		play.AIclickMan(key, pace[2], pace[3]);
+	} else {
+		play.AIclickPoint(pace[2], pace[3]);
+	}
+}
