@@ -187,3 +187,83 @@ play.AIPlay = function() {
 		play.AIclickPoint(pace[2], pace[3]);
 	}
 }
+
+// 检查是否长将
+play.checkFoul = function() {
+	var p = play.pace;
+	var len = parseInt(p.length, 10);
+	if (len > 11 && p[len-1] == p[len-5] && p[len-5] == p[len-9]) {
+		return p[len-4].split("");
+	}
+	return false;
+}
+
+play.AIclickMan = function(key, x, y) {
+	var man = com.mans[key];
+	// 吃子
+	man.isShow = false;
+	delete play.map[com.mans[play.nowManKey].y][com.mans[play.nowManKey].x];
+	play.map[y][x] = play.nowManKey;
+	play.showPane(com.mans[play.nowManKey].x, com.mans[play.nowManKey].y, x, y);
+
+	com.mans[play.nowManKey].x = x;
+	com.mans[play.nowManKey].y = y;
+	play.nowManKey = false;
+
+	com.show();
+	if (key == "j0")
+		play.showWin(-1);
+	else if (key == "J0")
+		play.showWin(1);
+}
+
+play.AIclickPoint = function(x, y) {
+	var key = play.nowManKey;
+	var man = com.mans[key];
+	if (play.nowManKey) {
+		delete play.map[com.mans[play.nowManKey].y][com.mans[play.nowManKey].x];
+		play.map[y][x] = key;
+
+		com.showPane(man.x, man.y, x, y);
+
+		man.x = x;
+		man.y = y;
+		play.nowManKey = false;
+	}
+	com.show();
+}
+
+play.indexOfPs = function(ps, xy) {
+	for (var i = 0; i < ps.length; i++) {
+		if (ps[i][0] == xy[0] && ps[i][1] == xy[1])
+			return true;
+	}
+	return false;
+}
+
+// 获得点击的着点
+play.getClickPoint = function(e) {
+	var domXY = com.getDomXY(com.canvas);
+	var x = Math.round((e.pageX - domXY.x - com.pointStartX - 20) / com.spaceX);
+	var y = Math.round((e.pageY - domXY.y - com.pointStartY - 20) / com.spaceY);
+	return {"x": x, "y": y};
+}
+
+// 获得棋子
+play.getClickMan = function(e) {
+	var clickXY = play.getClickPoint(e);
+	var x = clickXY.x;
+	var y = clickXY.y;
+	if (x < 0 || x > 8 || y < 0 || y > 9)
+		return false;
+	return (play.map[y][x] && play.map[y][x] != "0") ? play.map[y][x] : false;
+}
+
+play.showWin = function(my) {
+	play.isPlay = false;
+	if (my === 1) {
+		alert("恭喜你，你赢了！");
+	} else {
+		alert("很遗憾，你输了！");
+	}
+}
