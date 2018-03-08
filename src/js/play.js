@@ -1,4 +1,5 @@
 // @author 丁浩然 <dinghaoran@tiaozhan.com>
+// play.js用于游戏操作方面的控制
 
 // 声明一个空对象play
 var play = play || {};
@@ -11,12 +12,12 @@ play.init = function() {
 	play.nowManKey = false;                // 现在要操作的棋子
 	play.pace = [];                        // 记录每一步
 	play.isPlay = true;                    // 是否能走棋
-	play.mans = com.mans;
-	play.bylaw = com.bylaw;
-	play.show = com.show;
-	play.showPane = com.showPane;
+	play.mans = com.mans;                  // 记录棋子
+	play.bylaw = com.bylaw;                // 寻找可行的着法
+	play.show = com.show;                  // 用于显示
+	play.showPane = com.showPane;          // 用于显示棋子外框
 	play.isOffensive = true;               // 是否先手
-	play.depth = play.depth || 4;          // 搜索深度
+	play.depth = play.depth || 4;          // 搜索深度，默认为4
 	play.isFoul = false;                   // 是否犯规长将
 
 	com.pane.isShow = false; // 隐藏方块
@@ -34,16 +35,28 @@ play.init = function() {
 	}
 	play.show();
 
-	// 绑定点击事件
+	// 设置加入监听器，绑定点击事件
 	com.canvas.addEventListener("click", play.clickCanvas);
+	// clearInterval(play.timer);
 
-	// 监听悔棋的按钮，并进行处理悔棋
+	// 监听悔棋的按钮，并进行悔棋处理
 	com.get("regretBtn").addEventListener("click", function(e) {
 		play.regret();
 	});
+
+	// var initTime = new Date().getTime();
+	// for (var i = 0; i <= 100000; i++) {
+	// 	var h = play.map.join();
+	// 	for (var n in play.mans) {
+	// 		if (play.mans[n].show)
+	// 			h += play.mans[n].key + play.mans[n].x + play.mans[n].y;
+	// 	}
+	// }
+	// var nowTime = new Date().getTime();
+	// z([h, nowTime - initTime]);
 }
 
-// 悔棋的函数
+// 进行悔棋处理的函数
 play.regret = function() {
 	var map = com.arr2Clone(com.initMap);
 	// 初始化所有棋子
@@ -58,7 +71,7 @@ play.regret = function() {
 		}
 	}
 
-	// 处理记录的步数，撤回AI与玩家各一步
+	// 处理记录着法的数组，撤回AI与玩家的各一步
 	var pace = play.pace;
 	pace.pop();
 	pace.pop();
@@ -110,7 +123,7 @@ play.clickCanvas = function(e) {
 	play.isFoul = play.checkFoul(); // 检测是不是长将
 }
 
-// 管理点击棋子的函数，两种情况：选中或者吃子
+// 管理点击棋子事件的函数，两种情况：选中或者吃子
 play.clickMan = function(key, x, y) {
 	var man = com.mans[key];
 	// 吃子
@@ -119,6 +132,7 @@ play.clickMan = function(key, x, y) {
 		if (play.indexOfPs(com.mans[play.nowManKey].ps, [x, y])) {
 			man.isShow = false;
 			var pace = com.mans[play.nowManKey].x + "" + com.mans[play.nowManKey].y;
+			// z(bill.createMove(play.map, man.x, man.y, x, y));
 			delete play.map[com.mans[play.nowManKey].y][com.mans[play.nowManKey].x];
 			play.map[y][x] = play.nowManKey;
 			com.showPane(com.mans[play.nowManKey].x, com.mans[play.nowManKey].y, x, y);
@@ -152,13 +166,14 @@ play.clickMan = function(key, x, y) {
 	}
 }
 
-// 管理点击着点的函数
+// 管理点击着点事件的函数
 play.clickPoint = function(x, y) {
 	var key = play.nowManKey;
 	var man = com.mans[key];
 	if (play.nowManKey) {
 		if (play.indexOfPs(com.mans[key].ps, [x, y])) {
 			var pace = man.x + "" + man.y;
+			// z(bill.createMove(play.map, man.x, man.y, x, y));
 			delete play.map[man.y][man.x];
 			play.map[y][x] = key;
 			com.showPane(man.x, man.y, x, y);
@@ -204,7 +219,7 @@ play.checkFoul = function() {
 	return false;
 }
 
-// 管理AI模拟点击棋子的函数
+// 管理AI模拟点击棋子事件的函数
 play.AIclickMan = function(key, x, y) {
 	var man = com.mans[key];
 	// 吃子
@@ -224,7 +239,7 @@ play.AIclickMan = function(key, x, y) {
 		play.showWin(1);
 }
 
-// 管理AI模拟点击着点的函数
+// 管理AI模拟点击着点事件的函数
 play.AIclickPoint = function(x, y) {
 	var key = play.nowManKey;
 	var man = com.mans[key];
@@ -268,7 +283,7 @@ play.getClickMan = function(e) {
 	return (play.map[y][x] && play.map[y][x] != "0") ? play.map[y][x] : false;
 }
 
-// 用于对弈结束后显示胜负的函数
+// 对弈结束后显示胜负的函数
 play.showWin = function(my) {
 	play.isPlay = false;
 	if (my === 1) {
