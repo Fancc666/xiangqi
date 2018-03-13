@@ -144,11 +144,11 @@ window.onload = function() {
 	});
 
 	// 使用ajax载入文件的内容，注意必须要架在服务器上方可加载
-	com.getData("src/js/gambit.all.js", function(data) {
+	com.getData("src/data/gambit.all.js", function(data) {
 		com.gambit = data.split("");
 		AI.historyBill = com.gambit;
 	});
-	com.getData("src/js/store.js", function(data) {
+	com.getData("src/data/store.js", function(data) {
 		com.store = data.split("");
 	});
 }
