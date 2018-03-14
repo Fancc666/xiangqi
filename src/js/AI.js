@@ -113,7 +113,7 @@ AI.getMoves = function(map, my) {
 	return moves;
 }
 
-// 神奇的AI
+// 神奇的AI以及神奇的AlphaBeta算法
 AI.getAlphaBeta = function(A, B, depth, map, my) {
 
 	if (depth == 0) {

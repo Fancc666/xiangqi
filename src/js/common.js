@@ -8,7 +8,7 @@ var com = com || {};
 // 初始化com
 com.init = function(style) {
 	// 获取并设置当前的样式信息
-	com.nowStyle = style || com.getCookie("style") || "style1";
+	com.nowStyle = style || com.getCookie("style") || "style2";
 	var style = com.style[com.nowStyle];
 
 	com.width = style.width;             // 画布宽度
@@ -31,35 +31,6 @@ com.init = function(style) {
 	com.childList = com.childList || [];
 
 	com.loadImages(com.page); // 载入图片
-}
-
-// 样式表
-com.style = {
-	// 样式1
-	style1: {
-		width: 325,      // 画布宽度
-		height: 402,     // 画布高度
-		spaceX: 35,      // 着点X跨度
-		spaceY: 36,      // 着点Y跨度
-		pointStartX: 5,  // 第一个着点X坐标
-		pointStartY: 19, // 第一个着点Y坐标
-		page: "style_1"  // 图片目录
-	},
-	// 样式2
-	style2: {
-		width: 530,      // 画布宽度
-		height: 567,     // 画布高度
-		spaceX: 57,      // 着点X跨度
-		spaceY: 57,      // 着点Y跨度
-		pointStartX: -2, // 第一个着点X坐标
-		pointStartY: 0,  // 第一个着点Y坐标
-		page: "style_2"  // 图片目录
-	}
-}
-
-// 通过指定的id获取元素
-com.get = function(id) {
-	return document.getElementById(id);
 }
 
 // 加载页面
@@ -121,6 +92,11 @@ window.onload = function() {
 			style = "style1";
 		com.init(style);
 		com.show();
+
+		play.isPlay = true;
+		com.get("chessRight").style.display = "none";
+		com.get("moveInfo").style.display = "block";
+		com.get("moveInfo").innerHTML = "";
 		// 默认的搜索深度为4层
 		play.depth = 4;
 		play.init();
@@ -139,6 +115,35 @@ window.onload = function() {
 		com.gambit = data.split("");
 		AI.historyBill = com.gambit;
 	});
+}
+
+// 样式表
+com.style = {
+	// 样式1
+	style1: {
+		width: 325,      // 画布宽度
+		height: 402,     // 画布高度
+		spaceX: 35,      // 着点X跨度
+		spaceY: 36,      // 着点Y跨度
+		pointStartX: 5,  // 第一个着点X坐标
+		pointStartY: 19, // 第一个着点Y坐标
+		page: "style_1"  // 图片目录
+	},
+	// 样式2
+	style2: {
+		width: 530,      // 画布宽度
+		height: 567,     // 画布高度
+		spaceX: 57,      // 着点X跨度
+		spaceY: 57,      // 着点Y跨度
+		pointStartX: -2, // 第一个着点X坐标
+		pointStartY: 0,  // 第一个着点Y坐标
+		page: "style_2"  // 图片目录
+	}
+}
+
+// 通过指定的id获取元素
+com.get = function(id) {
+	return document.getElementById(id);
 }
 
 // 载入图片
@@ -347,85 +352,6 @@ com.initMap = [
 	[    , 'p0',     ,     ,     ,     ,     , 'p1',     ],
 	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
 	['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
-];
-
-// 以下为设置的几个残局，需手动强行切换棋盘方能进行
-com.initMap1 = [
-	[    ,     ,     , 'J0',     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     , 'c0',     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     , 's0',     ,     , 'C0',     ],
-	[    ,     ,     , 's1',     , 'j0',     ,     ,     ]
-];
-
-com.initMap2 = [
-	[    ,     , 'c0',     ,     ,     ,     ,     ,     ],
-	[    ,     ,     , 'J0', 'S0',     ,     ,     ,     ],
-	[    ,     ,     , 'S1',     ,     ,     ,     ,     ],
-	[    ,     ,     , 'M0',     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     , 'j0',     ,     ,     ,     ,     ]
-];
-
-com.initMap3 = [
-	[    ,     ,     ,     ,     , 'S0',     ,     ,     ],
-	[    ,     ,     ,     , 'J0',     ,     ,     ,     ],
-	[    ,     ,     , 'z0',     , 'S1',     ,     ,     ],
-	[    ,     ,     ,     , 'Z0',     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	['M0',     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     , 'p0',     ,     ,     ],
-	[    ,     ,     ,     , 'Z1',     ,     ,     ,     ],
-	[    ,     ,     , 'j0',     ,     ,     ,     ,     ]
-];
-
-com.initMap4 = [
-	[    ,     ,     , 'J0',     , 'S0',     ,     ,     ],
-	[    ,     ,     ,     , 'S1',     , 'C0',     ,     ],
-	[    ,     ,     ,     , 'z0',     ,     ,     ,     ],
-	[    , 'c0',     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     , 'x0',     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     , 'j0',     ,     ,     ,     ]
-];
-
-com.initMap5 = [
-	[    ,     ,     , 'S0', 'J0',     , 'm0', 'C0', 'p0'],
-	[    ,     ,     ,     , 'S1',     ,     ,     ,     ],
-	[    ,     ,     ,     , 'X0',     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     , 'Z0',     , 'C1',     ,     ,     ,     ],
-	[    ,     ,     , 'j0',     ,     ,     ,     ,     ]
-];
-
-com.initMap6 = [
-	[    ,     ,     , 'S0', 'J0',     , 'X0',     ,     ],
-	[    ,     ,     , 'c0', 'S1',     ,     ,     , 'p0'],
-	[    ,     ,     ,     ,     ,     , 'M0',     , 'X1'],
-	[    , 'c1',     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
-	[    ,     , 'C0', 'Z0',     , 'Z1',     ,     ,     ],
-	[    ,     ,     ,     , 'j0',     ,     ,     ,     ]
 ];
 
 // 各个棋子
@@ -867,7 +793,7 @@ com.value.Z = com.arr2Clone(com.value.z).reverse();
 
 // 各个棋子的详细信息
 com.args = {
-	// 红子 中文，图片路径，阵营，权重
+	// 红子的详细信息，包括其中文，图片路径，阵营，属性，权重
 	'c': {text: "车", img: 'r_c', my: 1, bl: "c", value: com.value.c},
 	'm': {text: "马", img: 'r_m', my: 1, bl: "m", value: com.value.m},
 	'x': {text: "相", img: 'r_x', my: 1, bl: "x", value: com.value.x},
@@ -876,7 +802,7 @@ com.args = {
 	'p': {text: "炮", img: 'r_p', my: 1, bl: "p", value: com.value.p},
 	'z': {text: "兵", img: 'r_z', my: 1, bl: "z", value: com.value.z},
 
-	// 黑子
+	// 黑子的详细信息，包括其中文，图片路径，阵营，属性，权重
 	'C': {text: "車", img: 'b_c', my: -1, bl: "c", value: com.value.C},
 	'M': {text: "馬", img: 'b_m', my: -1, bl: "m", value: com.value.M},
 	'X': {text: "象", img: 'b_x', my: -1, bl: "x", value: com.value.X},
@@ -968,3 +894,84 @@ com.class.Dot = function(img, x, y) {
 
 // 进行整个游戏的初始化
 com.init();
+
+// 以下为设置的几个残局，需手动强行切换棋盘方能进行
+com.initMap1 = [
+	[    ,     ,     , 'J0',     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     , 'c0',     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     , 's0',     ,     , 'C0',     ],
+	[    ,     ,     , 's1',     , 'j0',     ,     ,     ]
+];
+
+com.initMap2 = [
+	[    ,     , 'c0',     ,     ,     ,     ,     ,     ],
+	[    ,     ,     , 'J0', 'S0',     ,     ,     ,     ],
+	[    ,     ,     , 'S1',     ,     ,     ,     ,     ],
+	[    ,     ,     , 'M0',     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     , 'j0',     ,     ,     ,     ,     ]
+];
+
+com.initMap3 = [
+	[    ,     ,     ,     ,     , 'S0',     ,     ,     ],
+	[    ,     ,     ,     , 'J0',     ,     ,     ,     ],
+	[    ,     ,     , 'z0',     , 'S1',     ,     ,     ],
+	[    ,     ,     ,     , 'Z0',     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	['M0',     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     , 'p0',     ,     ,     ],
+	[    ,     ,     ,     , 'Z1',     ,     ,     ,     ],
+	[    ,     ,     , 'j0',     ,     ,     ,     ,     ]
+];
+
+com.initMap4 = [
+	[    ,     ,     , 'J0',     , 'S0',     ,     ,     ],
+	[    ,     ,     ,     , 'S1',     , 'C0',     ,     ],
+	[    ,     ,     ,     , 'z0',     ,     ,     ,     ],
+	[    , 'c0',     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     , 'x0',     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     , 'j0',     ,     ,     ,     ]
+];
+
+com.initMap5 = [
+	[    ,     ,     , 'S0', 'J0',     , 'm0', 'C0', 'p0'],
+	[    ,     ,     ,     , 'S1',     ,     ,     ,     ],
+	[    ,     ,     ,     , 'X0',     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     , 'Z0',     , 'C1',     ,     ,     ,     ],
+	[    ,     ,     , 'j0',     ,     ,     ,     ,     ]
+];
+
+com.initMap6 = [
+	[    ,     ,     , 'S0', 'J0',     , 'X0',     ,     ],
+	[    ,     ,     , 'c0', 'S1',     ,     ,     , 'p0'],
+	[    ,     ,     ,     ,     ,     , 'M0',     , 'X1'],
+	[    , 'c1',     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
+	[    ,     , 'C0', 'Z0',     , 'Z1',     ,     ,     ],
+	[    ,     ,     ,     , 'j0',     ,     ,     ,     ]
+];
+
+// 以下为设置的几个非常有意思的局面，也需手动强行切换棋盘方能进行
