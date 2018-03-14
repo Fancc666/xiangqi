@@ -1,10 +1,11 @@
 // @author 丁浩然 <dinghaoran@tiaozhan.com>
-// common.js用于游戏整体方面的控制
+
+// common.js文件用于游戏整体方面的控制
 
 // 声明一个空对象com
 var com = com || {};
 
-// 进行初始化的函数
+// 初始化com
 com.init = function(style) {
 	// 获取并设置当前的样式信息
 	com.nowStyle = style || com.getCookie("style") || "style1";
@@ -27,16 +28,14 @@ com.init = function(style) {
 	com.canvas.width = com.width;
 	com.canvas.height = com.height;
 
-	// 声明空数组childList
 	com.childList = com.childList || [];
 
 	com.loadImages(com.page); // 载入图片
-
-	// z(com.initMap.join());
 }
 
-// 样式
+// 样式表
 com.style = {
+	// 样式1
 	style1: {
 		width: 325,      // 画布宽度
 		height: 402,     // 画布高度
@@ -46,6 +45,7 @@ com.style = {
 		pointStartY: 19, // 第一个着点Y坐标
 		page: "style_1"  // 图片目录
 	},
+	// 样式2
 	style2: {
 		width: 530,      // 画布宽度
 		height: 567,     // 画布高度
@@ -57,36 +57,27 @@ com.style = {
 	}
 }
 
-// 通过id获取元素的函数
+// 通过指定的id获取元素
 com.get = function(id) {
 	return document.getElementById(id);
 }
 
-// 加载整个窗口页面显示的函数
+// 加载页面
 window.onload = function() {
 	// 实例化棋盘，提示点，棋子外框的管理类
-	com.bg = new com.class.Bg();     // 棋盘管理类
-	com.dot = new com.class.Dot();   // 提示点管理类
-	com.pane = new com.class.Pane(); // 棋子外框管理类
+	com.bg = new com.class.Bg();
+	com.dot = new com.class.Dot();
+	com.pane = new com.class.Pane();
 	com.pane.isShow = false;
 
 	com.childList = [com.bg, com.dot, com.pane];
-	com.mans = {}; // 棋子集合
+	com.mans = {}; // 存储棋子的集合
 	com.createMans(com.initMap); // 生成棋子
 	com.bg.show();
 	com.get("btnBox").style.display = "block";
 	play.init();
 
-	com.get("billBtn").addEventListener("click", function(e) {
-		if (confirm("是否结束对局，开始棋局研究？")) {
-			com.init();
-			com.get("chessRight").style.display = "block";
-			com.get("moveInfo").style.display = "none";
-			bill.init();
-		}
-	});
-
-	// 增加监听器，监听各个切换难度按钮的点击事件
+	// 增加三个监听器，监听各个切换难度按钮的点击事件
 	com.get("superPlay").addEventListener("click", function(e) {
 		if (confirm("确认开始大师级对弈？")) {
 			play.isPlay = true;
@@ -121,7 +112,7 @@ window.onload = function() {
 		}
 	});
 
-	// 监听“换肤”按钮，进行切换皮肤的效果
+	// 监听“换肤”按钮，切换皮肤
 	com.get("styleBtn").addEventListener("click", function(e) {
 		var style = com.nowStyle;
 		if (style == "style1")
@@ -148,12 +139,9 @@ window.onload = function() {
 		com.gambit = data.split("");
 		AI.historyBill = com.gambit;
 	});
-	com.getData("src/data/store.js", function(data) {
-		com.store = data.split("");
-	});
 }
 
-// 载入图片的函数
+// 载入图片
 com.loadImages = function(style) {
 	// 绘制棋盘
 	com.bgImg = new Image();
@@ -178,7 +166,7 @@ com.loadImages = function(style) {
 	document.getElementsByTagName("body")[0].style.background = "url(src/img/" + style + "/bg.jpg)";
 }
 
-// 显示数组列表中内容的函数
+// 显示数组列表中的内容
 com.show = function() {
 	com.ct.clearRect(0, 0, com.width, com.height);
 	for (var i = 0; i < com.childList.length; i++) {
@@ -186,7 +174,7 @@ com.show = function() {
 	}
 }
 
-// 显示移动的棋子外框的函数
+// 显示移动的棋子的外框
 com.showPane = function(x, y, newX, newY) {
 	com.pane.isShow = true;
 	com.pane.x = x;
@@ -195,7 +183,7 @@ com.showPane = function(x, y, newX, newY) {
 	com.pane.newY = newY;
 }
 
-// 生成map中存在的棋子的函数
+// 生成map中存在的棋子
 com.createMans = function(map) {
 	for (var i = 0; i < map.length; i++) {
 		for (var n = 0; n < map[i].length; n++) {
@@ -210,7 +198,7 @@ com.createMans = function(map) {
 	}
 }
 
-// 用于测试时调试输出的函数
+// 用于测试时进行调试输出
 com.alert = function(obj, f, n) {
 	if (typeof obj != "object") {
 		try {
@@ -229,10 +217,10 @@ com.alert = function(obj, f, n) {
 	}
 }
 
-// 把z为com.alert的简写，考虑z变量名最不常用，方便调试
+// 把z设为com.alert的简写，考虑z变量名最不常用，方便调试
 var z = com.alert;
 
-// 获取元素距离页面左侧距离的函数
+// 获取元素距离页面左侧的距离
 com.getDomXY = function(dom) {
 	var left = dom.offsetLeft;
 	var top = dom.offsetTop;
@@ -248,7 +236,7 @@ com.getDomXY = function(dom) {
 	};
 }
 
-// 获取浏览器cookie的函数
+// 获取浏览器的cookie
 com.getCookie = function(name) {
 	if (document.cookie.length > 0) {
 		start = document.cookie.indexOf(name + "=");
@@ -264,7 +252,7 @@ com.getCookie = function(name) {
 	return false;
 }
 
-// 进行克隆二维数组的函数
+// 克隆二维数组
 com.arr2Clone = function(arr) {
 	var newArr = [];
 	for (var i = 0; i < arr.length; i++) {
@@ -273,7 +261,7 @@ com.arr2Clone = function(arr) {
 	return newArr;
 }
 
-// 使用ajax载入数据的函数，注意要求架在服务器上方可正常使用
+// 使用ajax载入数据，注意要求架在服务器上方可正常使用
 com.getData = function(url, fun) {
 	var XMLHttpRequestObject = false;
 	if (window.XMLHttpRequest) {
@@ -293,7 +281,7 @@ com.getData = function(url, fun) {
 	}
 }
 
-// 将坐标转化为象棋专业着法的函数
+// 将坐标转化为象棋专业的着法
 com.createMove = function(map, x, y, newX, newY) {
 	var h = "";
 	var man = com.mans[map[y][x]];
@@ -361,6 +349,7 @@ com.initMap = [
 	['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
 ];
 
+// 设置的一个残局
 com.initMap1 = [
 	[    ,     ,     , 'J0',     ,     ,     ,     ,     ],
 	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
@@ -396,7 +385,7 @@ com.keys = {
 // 棋子能走的着点
 com.bylaw = {};
 
-// 判断车能走的着点的函数
+// 判断车能走的着点
 com.bylaw.c = function(x, y, map, my) {
 	var d = [];
 
@@ -444,7 +433,7 @@ com.bylaw.c = function(x, y, map, my) {
 	return d;
 }
 
-// 判断马能走的着点的函数
+// 判断马能走的着点
 com.bylaw.m = function(x, y, map, my) {
 	var d = [];
 
@@ -476,7 +465,7 @@ com.bylaw.m = function(x, y, map, my) {
 	return d;
 }
 
-// 判断相能走的着点的函数
+// 判断相能走的着点
 com.bylaw.x = function(x, y, map, my) {
 	var d = [];
 
@@ -511,7 +500,7 @@ com.bylaw.x = function(x, y, map, my) {
 	return d;
 }
 
-// 判断士能走的着点的函数
+// 判断士能走的着点
 com.bylaw.s = function(x, y, map, my) {
 	var d = [];
 
@@ -545,7 +534,7 @@ com.bylaw.s = function(x, y, map, my) {
 	return d;
 }
 
-// 判断将能走的着点的函数
+// 判断将能走的着点
 com.bylaw.j = function(x, y, map, my) {
 	var d = [];
 	var isNull = (function(y1, y2) {
@@ -589,7 +578,7 @@ com.bylaw.j = function(x, y, map, my) {
 	return d;
 }
 
-// 判断炮能走的着点的函数
+// 判断炮能走的着点
 com.bylaw.p = function(x, y, map, my) {
 	var d = [];
 
@@ -665,7 +654,7 @@ com.bylaw.p = function(x, y, map, my) {
 	return d;
 }
 
-// 判断卒能走的着点的函数
+// 判断卒能走的着点
 com.bylaw.z = function(x, y, map, my) {
 	var d = [];
 
@@ -694,7 +683,7 @@ com.bylaw.z = function(x, y, map, my) {
 	return d;
 }
 
-// 表示不同棋子在不同位置上的价值
+// value矩阵表示不同棋子在不同位置上的价值
 com.value = {
 	// 车的价值
 	c: [
@@ -848,6 +837,7 @@ com.class.Man = function(key, x, y) {
 	this.alpha = 1;
 	this.ps = []; // 着点
 
+	// 显示棋子
 	this.show = function() {
 		if (this.isShow) {
 			com.ct.save();
@@ -857,6 +847,7 @@ com.class.Man = function(key, x, y) {
 		}
 	}
 
+	// 获取棋子可走的着点
 	this.bl = function(map) {
 		var map = map || play.map;
 		return com.bylaw[o.bl](this.x, this.y, map, this.my);
@@ -869,6 +860,7 @@ com.class.Bg = function(img, x, y) {
 	this.y = y || 0;
 	this.isShow = true;
 
+	// 显示棋盘
 	this.show = function() {
 		if (this.isShow)
 			com.ct.drawImage(com.bgImg, com.spaceX * this.x, com.spaceY * this.y);
@@ -883,6 +875,7 @@ com.class.Pane = function(img, x, y) {
 	this.newY = y || 0;
 	this.isShow = true;
 
+	// 显示棋子外框
 	this.show = function() {
 		if (this.isShow) {
 			com.ct.drawImage(com.paneImg, com.spaceX * this.x + com.pointStartX, com.spaceY * this.y + com.pointStartY);
@@ -898,6 +891,7 @@ com.class.Dot = function(img, x, y) {
 	this.isShow = true;
 	this.dots = [];
 
+	// 显示提示点
 	this.show = function() {
 		for (var i = 0; i < this.dots.length; i++) {
 			if (this.isShow)
@@ -907,5 +901,5 @@ com.class.Dot = function(img, x, y) {
 	}
 }
 
-// 进行整个游戏的初始化操作
+// 进行整个游戏的初始化
 com.init();

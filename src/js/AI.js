@@ -1,11 +1,13 @@
 // @author 丁浩然 <dinghaoran@tiaozhan.com>
 
+// AI.js文件用于游戏AI方面的控制
+
 // 声明一个空对象AI
 var AI = AI || {};
 
 AI.historyTable = {}; // 历史表
 
-// 人工智能初始化的函数
+// 初始化AI
 AI.init = function(pace) {
 	var bill = AI.historyBill || com.gambit; // 开局库
 	if (bill) {
@@ -25,7 +27,7 @@ AI.init = function(pace) {
 			AI.historyBill = [];
 		}
 	}
-	// 如果棋谱里面没有，人工智能开始运作
+	// 如果棋谱里面没有，AI开始运作
 	var initTime = new Date().getTime();
 	AI.treeDepth = play.depth;
 
@@ -33,12 +35,10 @@ AI.init = function(pace) {
 	AI.setHistoryTable.length = 0;
 
 	var val = AI.getAlphaBeta(-99999, 99999, AI.treeDepth, com.arr2Clone(play.map), play.my);
-	// var val = AI.iterativeSearch(com.arr2Clone(play.map), play.my);
 	if (!val || val.value == -8888) {
 		AI.treeDepth = 2;
 		val = AI.getAlphaBeta(-99999, 99999, AI.treeDepth, com.arr2Clone(play.map), play.my);
 	}
-	// var val = AI.iterativeSearch(com.arr2Clone(play.map), play.my);
 	if (val && val.value != -8888) {
 		var man = play.mans[val.key];
 		var nowTime = new Date().getTime();
@@ -54,7 +54,7 @@ AI.init = function(pace) {
 	}
 }
 
-// 迭代加深搜索着法的函数
+// 迭代加深搜索着法
 AI.iterativeSearch = function(map, my) {
 	var timeOut = 100;
 	var initDepth = 1;
@@ -74,7 +74,7 @@ AI.iterativeSearch = function(map, my) {
 	return false;
 }
 
-// 取得棋盘上所有棋子的函数
+// 取得棋盘上的所有棋子
 AI.getMapAllMan = function(map, my) {
 	var mans = [];
 	for (var i = 0; i < map.length; i++) {
@@ -90,7 +90,7 @@ AI.getMapAllMan = function(map, my) {
 	return mans;
 }
 
-// 取得棋谱所有己方棋子的着法的函数
+// 取得棋谱所有己方棋子的着法
 AI.getMoves = function(map, my) {
 	var manArr = AI.getMapAllMan(map, my);
 	var moves = [];
@@ -113,13 +113,8 @@ AI.getMoves = function(map, my) {
 	return moves;
 }
 
-// 神奇的AI的函数
+// 神奇的AI
 AI.getAlphaBeta = function(A, B, depth, map, my) {
-	// var txtMap = map.join();
-	// var history = AI.historyTable[txtMap];
-	// if (history && history.depth >= AI.treeDepth - depth + 1) {
-	// 	return history.value * my;
-	// }
 
 	if (depth == 0) {
 		return {"value": AI.evaluate(map, my)}; // 局面评价函数
@@ -127,7 +122,6 @@ AI.getAlphaBeta = function(A, B, depth, map, my) {
 	var moves = AI.getMoves(map, my); // 生成全部走法
 
 	// 这里排序以后会增加效率
-
 	for (var i = 0; i < moves.length; i++) {
 		// 走这个走法
 		var move = moves[i];
@@ -151,14 +145,12 @@ AI.getAlphaBeta = function(A, B, depth, map, my) {
 			delete map[newY][newX];
 			if (clearKey) {
 				map[newY][newX] = clearKey;
-				// play.mans[clearKey].isShow = false;
 			}
 
 			return {"key": key, "x": newX, "y": newY, "value": 8888};
 			// return rootKey;
 		} else {
 			var val = -AI.getAlphaBeta(-B, -A, depth - 1, map, -my).value;
-			// val = val || val.value;
 
 			// 撤销这个走法
 			play.mans[key].x = oldX;
@@ -167,12 +159,8 @@ AI.getAlphaBeta = function(A, B, depth, map, my) {
 			delete map[newY][newX];
 			if (clearKey) {
 				map[newY][newX] = clearKey;
-				// play.mans[clearKey].isShow = true;
 			}
 			if (val >= B) {
-				// 将这个走法记录到历史表中
-				// AI.setHistoryTable(txtMap, AI.treeDepth - depth + 1, B, my);
-
 				return {"key": key, "x": newX, "y": newY, "value": B};
 			}
 			if (val > A) {
@@ -182,9 +170,6 @@ AI.getAlphaBeta = function(A, B, depth, map, my) {
 			}
 		}
 	}
-
-	// 将这个走法记录到历史表中
-	// AI.setHistoryTable(txtMap, AI.treeDepth - depth + 1, A, my);
 
 	if (AI.treeDepth == depth) {
 		// 已经递归回根了
@@ -199,13 +184,13 @@ AI.getAlphaBeta = function(A, B, depth, map, my) {
 	return {"key": key, "x": newX, "y": newY, "value": A};
 }
 
-// 将着法记录到历史表的函数
+// 将着法记录到历史表
 AI.setHistoryTable = function(txtMap, depth, value, my) {
 	AI.setHistoryTable.length++;
 	AI.historyTable[txtMap] = {"depth": depth, "value": value};
 }
 
-// 评估棋局，取得棋盘双方棋子价值差的函数
+// 评估棋局，取得棋盘双方棋子价值差
 AI.evaluate = function(map, my) {
 	var val = 0;
 	for (var i = 0; i < map.length; i++) {
@@ -216,9 +201,6 @@ AI.evaluate = function(map, my) {
 			}
 		}
 	}
-	// val += Math.floor(Math.random() * 10);
-	// com.show();
-	// z(val * my);
 	AI.number++;
 	return val * my;
 }
