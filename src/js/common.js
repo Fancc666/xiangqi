@@ -52,7 +52,6 @@ window.onload = function() {
 	com.get("superPlay").addEventListener("click", function(e) {
 		if (confirm("确认开始大师级对弈？")) {
 			play.isPlay = true;
-			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML = "";
 			// 高手级搜索深度设为5层
@@ -63,7 +62,6 @@ window.onload = function() {
 	com.get("normalPlay").addEventListener("click", function(e) {
 		if (confirm("确认开始普通级对弈？")) {
 			play.isPlay = true;
-			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML = "";
 			// 普通级搜索深度设为4层
@@ -74,7 +72,6 @@ window.onload = function() {
 	com.get("tyroPlay").addEventListener("click", function(e) {
 		if (confirm("确认开始新手级对弈？")) {
 			play.isPlay = true;
-			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML = "";
 			// 新手级搜索深度设为3层
@@ -94,7 +91,6 @@ window.onload = function() {
 		com.show();
 
 		play.isPlay = true;
-		com.get("chessRight").style.display = "none";
 		com.get("moveInfo").style.display = "block";
 		com.get("moveInfo").innerHTML = "";
 		// 默认的搜索深度为4层
