@@ -8,7 +8,7 @@ var com = com || {};
 // 初始化com
 com.init = function(style) {
 	// 获取并设置当前的样式信息
-	com.nowStyle = style || com.getCookie("style") || "style2";
+	com.nowStyle = style || "style2";
 	var style = com.style[com.nowStyle];
 
 	com.width = style.width;             // 画布宽度
@@ -20,7 +20,8 @@ com.init = function(style) {
 	com.page = style.page;               // 图片目录
 
 	// 设置棋盘版面的宽度
-	com.get("box").style.width = com.width + 130 + "px";
+	// com.get("box").style.width = com.width + 130 + "px";
+	com.get("box").style.width = com.width + "px";
 
 	// 获取当前的画布以及画笔用于绘制图像
 	com.canvas = com.get("chess");        // 画布
@@ -46,7 +47,8 @@ window.onload = function() {
 	com.createMans(com.initMap); // 生成棋子
 	com.bg.show();
 	com.get("btnBox").style.display = "block";
-	play.init();
+
+	// play.init();
 
 	// 增加三个监听器，监听各个切换难度按钮的点击事件
 	com.get("superPlay").addEventListener("click", function(e) {
@@ -81,30 +83,38 @@ window.onload = function() {
 	});
 
 	// 监听“换肤”按钮，切换皮肤
-	com.get("styleBtn").addEventListener("click", function(e) {
-		var style = com.nowStyle;
-		if (style == "style1")
-			style = "style2";
-		else if (style == "style2")
-			style = "style1";
-		com.init(style);
-		com.show();
+	// com.get("styleBtn").addEventListener("click", function(e) {
+	// 	var style = com.nowStyle;
+	// 	if (style == "style1")
+	// 		style = "style2";
+	// 	else if (style == "style2")
+	// 		style = "style1";
+	// 	com.init(style);
+	// 	com.show();
 
-		play.isPlay = true;
-		com.get("moveInfo").style.display = "block";
-		com.get("moveInfo").innerHTML = "";
-		// 默认的搜索深度为4层
-		play.depth = 4;
-		play.init();
-		document.cookie = "style=" + style;
-		clearInterval(timer);
-		var i = 0;
-		var timer = setInterval(function() {
-			com.show();
-			if (i++ >= 5)
-				clearInterval(timer);
-		}, 2000);
-	});
+	// 	play.isPlay = true;
+	// 	com.get("moveInfo").style.display = "block";
+	// 	com.get("moveInfo").innerHTML = "";
+	// 	// 默认的搜索深度为4层
+	// 	play.depth = 4;
+	// 	play.init();
+	// 	document.cookie = "style=" + style;
+	// 	clearInterval(timer);
+	// 	var i = 0;
+	// 	var timer = setInterval(function() {
+	// 		com.show();
+	// 		if (i++ >= 5)
+	// 			clearInterval(timer);
+	// 	}, 2000);
+	// });
+
+	// 窄屏样式
+	if (window.innerWidth <= 600){
+		var style = "style1";
+		com.init(style);
+		setTimeout(()=>{com.bg.show()}, 50);
+		// com.show();
+	}
 
 	// 使用ajax载入文件的内容，注意必须要架在服务器上方可加载
 	com.getData("src/data/gambit.all.js", function(data) {
@@ -127,14 +137,15 @@ com.style = {
 	},
 	// 样式2
 	style2: {
-		width: 530,      // 画布宽度
+		width: 500,      // 画布宽度
 		height: 567,     // 画布高度
 		spaceX: 57,      // 着点X跨度
 		spaceY: 57,      // 着点Y跨度
 		pointStartX: -2, // 第一个着点X坐标
 		pointStartY: 0,  // 第一个着点Y坐标
 		page: "style_2"  // 图片目录
-	}
+	},
+	// 样式3
 }
 
 // 通过指定的id获取元素
