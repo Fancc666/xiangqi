@@ -12,6 +12,23 @@
 		<div class="chess_left">
 			<canvas id="chess">sorry~您的浏览器版本过低，建议使用firefox或者chrome浏览器！</canvas>
 			<div class="btn_box" id="btnBox">
+				<input type="button" name="intro" id="intro" value="游戏说明" onclick="document.getElementById('gameInfo').style.display='flex'">
+				<select id="board" name="board">
+					<option value="initMap0">默认棋局</option>
+					<option value="initMap1">残局1</option>
+					<option value="initMap2">残局2</option>
+					<option value="initMap3">残局3</option>
+					<option value="initMap4">残局4</option>
+					<option value="initMap5">残局5</option>
+					<option value="initMap6">残局6</option>
+					<option value="initMap7">残局7</option>
+					<option value="initMap01">气吞关右</option>
+					<option value="initMap02">马蹀阏氏</option>
+					<option value="initMap03">羝羊触藩</option>
+					<option value="initMap04">良将安边</option>
+					<option value="initMap05">群鼠争穴</option>
+				</select>
+				<div class="b"></div>
 				<input type="button" name="offensivePlay" id="tyroPlay" value="新手水平">
 				<input type="button" name="offensivePlay" id="normalPlay" value="普通水平">
 				<input type="button" name="offensivePlay" id="superPlay" value="大师水平">
@@ -20,8 +37,25 @@
 			</div>
 		</div>
 	</div>
+	<div id="gameInfo" class="game_info" onclick="this.style.display='none'">
+		<h2>游戏说明</h2>
+		<div>
+			<p>1.你将和AI进行对战，你一直是先手，AI只支持后手</p>
+			<p>2.请先选好棋局再点击难度</p>
+			<p>例如我想和最厉害的AI下残局1，就先选择残局1，然后点击大师水平开始游戏</p>
+			<p>3.建议少使用悔棋功能，经常出bug</p>
+			<p>4.FANCC对本程序进行改编，但不是第一作者</p>
+			<p>编写于2023年5月</p>
+		</div>
+	</div>
 	<div id="moveInfo" class="move_info"></div>
-	<div id="proj_info" class="proj_info"><span>代码改编自<a href="https://gitee.com/dinghaoran/xiangQiWeb">https://gitee.com/dinghaoran/xiangQiWeb</a>，By FANCC, 2023.</span></div>
+	<div id="proj_info" class="proj_info">
+		<span>
+			代码改编自
+			<a href="https://gitee.com/dinghaoran/xiangQiWeb">https://gitee.com/dinghaoran/xiangQiWeb</a>
+			，By FANCC, 2023.
+		</span>
+	</div>
 	<script type="text/javascript" src="src/js/common.js"></script>
 	<script type="text/javascript" src="src/js/play.js"></script>
 	<script type="text/javascript" src="src/js/AI.js"></script>

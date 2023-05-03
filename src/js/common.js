@@ -5,8 +5,8 @@
 // 声明一个空对象com
 var com = com || {};
 
-com.isSmallDisplay = false;
 // 窄屏样式
+com.isSmallDisplay = false;
 if (window.innerWidth <= 600){
 	com.isSmallDisplay = true;
 }
@@ -15,7 +15,6 @@ if (window.innerWidth <= 600){
 com.init = function(style) {
 	// 获取并设置当前的样式信息
 	com.nowStyle = style || "style2";
-	console.log(style);
 	var style = com.style[com.nowStyle];
 
 	com.width = style.width;             // 画布宽度
@@ -49,9 +48,10 @@ window.onload = function() {
 	com.pane = new com.class.Pane();
 	com.pane.isShow = false;
 
-	com.childList = [com.bg, com.dot, com.pane];
 	com.mans = {}; // 存储棋子的集合
-	com.createMans(com.initMap); // 生成棋子
+
+	// com.childList = [com.bg, com.dot, com.pane];
+	// com.createMans(com.initMap); // 生成棋子的部分换成了函数initMap来适应残局玩法
 	com.bg.show();
 	com.get("btnBox").style.display = "block";
 
@@ -65,6 +65,7 @@ window.onload = function() {
 			com.get("moveInfo").innerHTML = "";
 			// 高手级搜索深度设为5层
 			play.depth = 5;
+			initMap();
 			play.init();
 		}
 	});
@@ -75,6 +76,7 @@ window.onload = function() {
 			com.get("moveInfo").innerHTML = "";
 			// 普通级搜索深度设为4层
 			play.depth = 4;
+			initMap();
 			play.init();
 		}
 	});
@@ -85,6 +87,7 @@ window.onload = function() {
 			com.get("moveInfo").innerHTML = "";
 			// 新手级搜索深度设为3层
 			play.depth = 3;
+			initMap();
 			play.init();
 		}
 	});
@@ -273,24 +276,33 @@ com.arr2Clone = function(arr) {
 }
 
 // 使用ajax载入数据，注意要求架在服务器上方可正常使用
+// com.getData = function(url, fun) {
+// 	var XMLHttpRequestObject = false;
+// 	if (window.XMLHttpRequest) {
+// 		XMLHttpRequestObject = new XMLHttpRequest();
+// 	} else if (window.ActiveXObject) {
+// 		XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
+// 	}
+// 	if (XMLHttpRequestObject) {
+// 		XMLHttpRequestObject.open("GET", url);
+// 		XMLHttpRequestObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+// 		XMLHttpRequestObject.onreadystatechange = function() {
+// 			if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200) {
+// 				fun(XMLHttpRequestObject.responseText);
+// 			}
+// 		}
+// 		XMLHttpRequestObject.send(null);
+// 	}
+// }
+// 使用fetch实现获取data功能
 com.getData = function(url, fun) {
-	var XMLHttpRequestObject = false;
-	if (window.XMLHttpRequest) {
-		XMLHttpRequestObject = new XMLHttpRequest();
-	} else if (window.ActiveXObject) {
-		XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	if (XMLHttpRequestObject) {
-		XMLHttpRequestObject.open("GET", url);
-		XMLHttpRequestObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		XMLHttpRequestObject.onreadystatechange = function() {
-			if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200) {
-				fun(XMLHttpRequestObject.responseText);
-			}
-		}
-		XMLHttpRequestObject.send(null);
-	}
-}
+	fetch(url, {
+	  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	})
+	.then(response => response.text())
+	.then(data => fun(data))
+	.catch(error => console.error(error));
+  }  
 
 // 将坐标转化为象棋专业的着法
 com.createMove = function(map, x, y, newX, newY) {
@@ -347,7 +359,7 @@ com.createMove = function(map, x, y, newX, newY) {
 }
 
 // 初始时的象棋棋盘
-com.initMap = [
+com.initMap0 = [
 	['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
 	[    ,     ,     ,     ,     ,     ,     ,     ,     ],
 	[    , 'P0',     ,     ,     ,     ,     , 'P1',     ],
@@ -1068,3 +1080,13 @@ com.initMap05 = [
 	[    ,     ,     ,     , 'Z0',     , 'C1',     ,     ],
 	[    ,     , 'Z1',     ,     , 'j0',     ,     ,     ]
 ];
+
+// 默认棋谱
+com.initMap = com.initMap0;
+
+// 残局玩法
+function initMap(){
+	com.childList = [com.bg, com.dot, com.pane];
+	com.initMap = com[com.get("board").value];
+	com.createMans(com.initMap);
+}

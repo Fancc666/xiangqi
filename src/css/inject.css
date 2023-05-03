@@ -28,7 +28,7 @@ body{
 .proj_info a{
     color: white;
 }
-.btn_box input{
+.btn_box input, .btn_box select{
     border-radius: 0;
     padding: 2px 3px;
     border:  1px solid black;
@@ -37,4 +37,35 @@ body{
 .btn_box{
     user-select: none;
     -webkit-user-select: none;
+}
+.chess_left{
+    position: relative;
+    top: -15px;
+}
+.b{
+    display: block;
+    height: 5px;
+}
+.game_info{
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 40px);
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, .8);
+    /* display: flex; */
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0 0 0;
+    line-height: 1.5;
+}
+.game_info > div{
+    width: 90%;
+}
+.game_info p{
+    font-size: 18px;
+}
+.game_info h2{
+    font-size: 25px;
 }
