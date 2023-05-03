@@ -5,10 +5,17 @@
 // 声明一个空对象com
 var com = com || {};
 
+com.isSmallDisplay = false;
+// 窄屏样式
+if (window.innerWidth <= 600){
+	com.isSmallDisplay = true;
+}
+
 // 初始化com
 com.init = function(style) {
 	// 获取并设置当前的样式信息
 	com.nowStyle = style || "style2";
+	console.log(style);
 	var style = com.style[com.nowStyle];
 
 	com.width = style.width;             // 画布宽度
@@ -107,14 +114,6 @@ window.onload = function() {
 	// 			clearInterval(timer);
 	// 	}, 2000);
 	// });
-
-	// 窄屏样式
-	if (window.innerWidth <= 600){
-		var style = "style1";
-		com.init(style);
-		setTimeout(()=>{com.bg.show()}, 100);
-		// com.show();
-	}
 
 	// 使用ajax载入文件的内容，注意必须要架在服务器上方可加载
 	com.getData("src/data/gambit.all.js", function(data) {
@@ -900,7 +899,11 @@ com.class.Dot = function(img, x, y) {
 }
 
 // 进行整个游戏的初始化
-com.init();
+if (com.isSmallDisplay){
+	com.init("style1");
+}else{
+	com.init();
+}
 
 // 以下为设置的几个残局，需手动强行切换棋盘方能进行
 com.initMap1 = [
