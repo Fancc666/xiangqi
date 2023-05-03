@@ -34,3 +34,7 @@ body{
     border:  1px solid black;
     margin: 0 8px;
 }
+.btn_box{
+    user-select: none;
+    -webkit-user-select: none;
+}
