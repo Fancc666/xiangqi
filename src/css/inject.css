@@ -15,4 +15,22 @@ body{
     position: absolute;
     top: 5px;
     right: 5px;
+    margin-top: 5px !important;
+}
+.proj_info{
+    position: absolute;
+    color: white;
+    width: calc(100% - 2 * 20px);
+    padding: 0 20px;
+    bottom: 18px;
+    text-align: center;
+}
+.proj_info a{
+    color: white;
+}
+.btn_box input{
+    border-radius: 0;
+    padding: 2px 3px;
+    border:  1px solid black;
+    margin: 0 8px;
 }

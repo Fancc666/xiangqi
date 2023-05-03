@@ -112,7 +112,7 @@ window.onload = function() {
 	if (window.innerWidth <= 600){
 		var style = "style1";
 		com.init(style);
-		setTimeout(()=>{com.bg.show()}, 50);
+		setTimeout(()=>{com.bg.show()}, 100);
 		// com.show();
 	}
 
